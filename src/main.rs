@@ -20,7 +20,6 @@ const GeV: f64 = 1000.0 * 1000.0 * 1000.0;
 
 // ---------------------------- nucleons constants ---------------------
 
-
 const m_electron: f64 = 0.511; // MeV/c^2
 const m_proton: f64 = 938.280; // MeV/c^2
 const m_neutron: f64 = 939.573; // MeV/c^2
@@ -55,6 +54,12 @@ impl Isotope{
         Self{
             element, A, Z, N,
         }
+    }
+
+    fn mass(&self) -> f64{
+        (self.Z as f64) * m_proton +
+        (self.N as f64) * m_neutron -
+        self.binding_energy()
     }
 
     fn binding_energy(&self) -> f64{
@@ -103,17 +108,22 @@ impl Isotope{
                  {:<20} {:>15} nucleons \n\
                  {:<20} {:>15} protons \n\
                  {:<20} {:>15} neutrons \n\
+                 {:<20} {:>15.3} amu \n\
+                 {:<20} {:>15.3} MeV/c^2 \n\
+                 
                  {:<20} {:>15.3} MeV \n\
-                 {:<20} {:>15.3} MeV \n\
+                 {:<20} {:>15.3} Mev \n\
                  -----------------------------------------", 
                  "Element:", self.element,
                  "A", self.A,
                  "Z", self.Z,
                  "N", self.N,
+                 "Mass (amu)", self.mass() / amu,
+                 "", self.mass(),
                  "Binding Energy:", self.binding_energy(),
-                 "BE/A:", self.binding_energy_per_nucleon()
-                 );
-    }
+                 "BE/A:", self.binding_energy_per_nucleon(),
+                ); 
+    } 
 }
 
 
@@ -121,7 +131,7 @@ fn main() {
     
     let U_236 = Isotope::create_isotope(String::from("Uranium"), 236, 92, 144);
 
-    let Pd_117 = Isotope::create_isotope(String::from("Palladium"), 117, 46, 117 - 4);
+    let Pd_117 = Isotope::create_isotope(String::from("Palladium"), 117, 46, 117 - 46);
 
     let Xe_140 = Isotope::create_isotope(String::from("Xenon"), 140, 54, 140 - 54);
 
@@ -133,3 +143,4 @@ fn main() {
     Xe_140.report();
     Sr_94.report();    
 }
+
