@@ -55,12 +55,19 @@ impl Isotope{
             element, A, Z, N,
         }
     }
+    
+    fn get_upper_isobar(&self) -> Self{
+        Isotope::create_isotope(String::from("UnIm"), self.A, self.Z + 1, self.N - 1) 
+    }
 
     fn mass(&self) -> f64{
+        // returns the mass in Mev/c^2 units, divide by 'amu' to get amu units
         (self.Z as f64) * m_proton +
         (self.N as f64) * m_neutron -
         self.binding_energy()
     }
+    
+
 
     fn binding_energy(&self) -> f64{
         /// Liquid Drop Model
@@ -108,11 +115,11 @@ impl Isotope{
                  {:<20} {:>15} nucleons \n\
                  {:<20} {:>15} protons \n\
                  {:<20} {:>15} neutrons \n\
-                 {:<20} {:>15.3} amu \n\
-                 {:<20} {:>15.3} MeV/c^2 \n\
+                 {:<20} {:>15.5} amu \n\
+                 {:<20} {:>15.5} MeV/c^2 \n\
                  
-                 {:<20} {:>15.3} MeV \n\
-                 {:<20} {:>15.3} Mev \n\
+                 {:<20} {:>15.5} MeV \n\
+                 {:<20} {:>15.5} Mev \n\
                  -----------------------------------------", 
                  "Element:", self.element,
                  "A", self.A,
@@ -123,7 +130,8 @@ impl Isotope{
                  "Binding Energy:", self.binding_energy(),
                  "BE/A:", self.binding_energy_per_nucleon(),
                 ); 
-    } 
+    }
+
 }
 
 
@@ -141,6 +149,17 @@ fn main() {
     U_236.report();
     Pd_117.report();
     Xe_140.report();
-    Sr_94.report();    
+    Sr_94.report();   
+
+
+    println!("Creating isobar of uranium-236");
+
+    let unknown = U_236.get_upper_isobar();
+
+    unknown.report();
+
+    U_236.report()
+
+
 }
 
