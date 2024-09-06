@@ -18,6 +18,15 @@ const keV: f64 = 1000.0;
 const MeV: f64 = 1000.0 * 1000.0;
 const GeV: f64 = 1000.0 * 1000.0 * 1000.0;
 
+// ---------------------------- nucleons constants ---------------------
+
+
+const m_electron: f64 = 0.511; // MeV/c^2
+const m_proton: f64 = 938.280; // MeV/c^2
+const m_neutron: f64 = 939.573; // MeV/c^2
+
+const amu: f64 = 931.5; // 1 amu = 931.5 MeV/c^2 = 1.661 * 10e-27 kg
+
 // ---------------------------- liquid drop Model constants ------------
 
 const A_V: f64 = 15.5; // MeV (volume coefficient)
