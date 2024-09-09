@@ -165,7 +165,7 @@ impl Isotope{
     pub fn report(&self) {
         println!(
                 "------------- Isotope Report ------------ \n\
-                 {:<20} {:>15} \n\
+                 {:<20} {:>15} ({})\n\
                  {:<20} {:>15} nucleons \n\
                  {:<20} {:>15} protons \n\
                  {:<20} {:>15} neutrons \n\
@@ -175,7 +175,7 @@ impl Isotope{
                  {:<20} {:>15.5} MeV \n\
                  {:<20} {:>15.5} Mev \n\
                  -----------------------------------------", 
-                 "Element:", self.element,
+                 "Element:", self.element, self.symbol,
                  "A", self.A,
                  "Z", self.Z,
                  "N", self.N,
