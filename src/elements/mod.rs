@@ -17,7 +17,7 @@ use std::io::{BufReader, BufRead, Error, ErrorKind};
 use std::path::{Path, PathBuf};
 
 // elements.txt
-const elements_path: &str = "./elements/elements.txt";
+const elements_path: &str = "./src/elements/elements.txt";
 
 // ---------------------------- units ----------------------------------
 
@@ -43,71 +43,77 @@ const A_A: f64 = 23.0; // MeV (asymmetry term coefficient)
 const A_P: f64 = 34.0; // MeV (pairing term coefficient)    
 
 
-pub fn get_element(proton_number: i32) -> Result<(String, String), Error>{
-    
-    
-    match File::open(elements_path){
-        Ok(file) => {
-            println!("Elements was opened successfully");
-            let reader = BufReader::new(file);
-            //    .has_headers(false)
-            //    .from_reader(file);
+pub fn get_element_from_protons(num_protons: i32) -> Result<(String, String), Error>{
+    /// Retrieves the name and symbol of a chemical element based on its proton number.
+    ///
+    /// This function looks up the element corresponding to the given `num_protons` in a file
+    /// containing data about elements. It returns the element's name and symbol as a tuple `(String, String)`.
+    ///
+    /// # Arguments
+    ///
+    /// * `num_protons` - An integer representing the proton number (atomic number) of the element. 
+    ///                   Must be between 1 and 118.
+    ///
+    /// # Returns
+    ///
+    /// * `Ok((element, symbol))` - A tuple containing the element's name and symbol as `String`.
+    /// * `Err(Error)` - If the `num_protons` is out of range (1-118) or if there are issues reading from the file    ///
+    /// # Errors
+    ///
+    /// This function will return an `Err` in the following cases:
+    /// * If the `num_protons` is outside the valid range (1-118).
+    /// * If the elements file cannot be opened or read from.
+    /// * If the elements file has been shortened or malformed.
+    /// * If a valid line for the given proton number cannot be retrieved. 
 
-            let collection: Vec<_> = reader.lines().collect(); // get an iterator and collect
-                                                                 // into a Vec
-           
-            
-            match collection.get({proton_number - 1} as usize){ // index the vec for the                                                                                  // proton number
-                Some(value) => {
-                    match value {
-                        Ok(info) =>{
-                            let temp_str = String::from(info);
-                            let result: Vec<_> = temp_str.split(",").collect();
-                            
-                            let element = result[0];
-                            let symbol = result[1];
-
-                            return Ok((String::from(element), String::from(symbol)));                            
-                        }
-                        Err(err) => {
-                            let error = Error::new(ErrorKind::Other, "Error getting info");
-                            return Err(error);
-                        }
-                    }
-                }
-                None => {
-                    let error = Error::new(ErrorKind::Other, "Proton number out of range 1-118");
-                    return Err(error);
-                }
-            }
-                
-        }   
-        Err(err) => {
-            eprintln!("Error opening 'elements.txt' from path {} \n\
-                      (make sure to run crate from root dir) \n\
-                      error: {} ", elements_path, err);
-            return Err(err);    
-        }
+    // Ensure proton number is between 1 and 118
+    if num_protons < 1 || num_protons > 118 {
+        return Err(Error::new(ErrorKind::Other, "Proton Number out of Range 1-118"));
     }
- 
+    
+    let file = File::open(elements_path)?;  
+    let reader = BufReader::new(file);
+    
+    let collection: Vec<String> = reader.lines().collect::<Result<_, _>>()?; // Vec<String>
+                                                                             
+    if collection.len() < 118 {
+        return Err(Error::new(ErrorKind::Other, "Malformed 'elements.txt' file (should be 118 lines)"));
+    }      
+
+    let line = &collection[(num_protons - 1) as usize]; // String
+    
+    let mut parts = line.split(','); // iterator over &str slices
+
+    let element = parts.next()             // Option<&str>
+                       .unwrap_or("")      // Some(value) => &str slice, None => use ""
+                       .to_string();       // String, owned by 'element'
+                    
+    let symbol = parts.next()              // ^^
+                      .unwrap_or("")
+                      .to_string();        // String, owned by 'symbol'
+
+    Ok((element, symbol))   // Result<(String, String)> 
 }
  
 pub struct Isotope{
     element: String,
+    symbol: String,
     A: i32,
     Z: i32,
     N: i32,
 }
 
 impl Isotope{
-    pub fn create_isotope(element: String, A: i32, Z: i32, N: i32) -> Self{
+    pub fn from_nucleons(A: i32, Z: i32) -> Self{
+        let Ok((element, symbol)) = get_element_from_protons(Z) else { todo!() };
+        let N = A - Z;
         Self{
-            element, A, Z, N,
+            element, symbol, A, Z, N
         }
     }
     
     pub fn get_upper_isobar(&self) -> Self{
-        Isotope::create_isotope(String::from("UnIm"), self.A, self.Z + 1, self.N - 1) 
+        Isotope::from_nucleons(self.A, self.Z + 1) 
     }
 
     pub fn mass(&self) -> f64{

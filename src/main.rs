@@ -12,23 +12,19 @@
 #![allow(non_snake_case)]           // for element names such as U for Uranium
 
 use elements::Isotope;
-use elements::get_element;
-use std::env;
-use std::fs;    // filesystem
-
 
 pub mod elements;
 
 
 fn hw1_isotopes() {
     
-    let U_236 = Isotope::create_isotope(String::from("Uranium"), 236, 92, 144);
+    let U_236 = Isotope::from_nucleons(236, 92);
 
-    let Pd_117 = Isotope::create_isotope(String::from("Palladium"), 117, 46, 117 - 46);
+    let Pd_117 = Isotope::from_nucleons(117, 46);
 
-    let Xe_140 = Isotope::create_isotope(String::from("Xenon"), 140, 54, 140 - 54);
+    let Xe_140 = Isotope::from_nucleons(140, 54);
 
-    let Sr_94 = Isotope::create_isotope(String::from("Strontium"), 94, 38, 94 - 38);
+    let Sr_94 = Isotope::from_nucleons(94, 38);
     
 
     U_236.report();
@@ -41,7 +37,7 @@ fn hw1_isotopes() {
 
 fn main(){
     
-    println!("{:?}", get_element(69));
+    hw1_isotopes();
 
 
 }
