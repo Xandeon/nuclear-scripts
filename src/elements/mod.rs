@@ -12,6 +12,13 @@
 #![allow(non_upper_case_globals)]   // for scientific units
 #![allow(non_snake_case)]           // for element names such as U for Uranium
 
+use std::fs::File;
+use std::io::{BufReader, BufRead, Error, ErrorKind};
+use std::path::{Path, PathBuf};
+
+// elements.txt
+const elements_path: &str = "./elements/elements.txt";
+
 // ---------------------------- units ----------------------------------
 
 const eV: f64 = 1.0;
@@ -36,6 +43,55 @@ const A_A: f64 = 23.0; // MeV (asymmetry term coefficient)
 const A_P: f64 = 34.0; // MeV (pairing term coefficient)    
 
 
+pub fn get_element(proton_number: i32) -> Result<(String, String), Error>{
+    
+    
+    match File::open(elements_path){
+        Ok(file) => {
+            println!("Elements was opened successfully");
+            let reader = BufReader::new(file);
+            //    .has_headers(false)
+            //    .from_reader(file);
+
+            let collection: Vec<_> = reader.lines().collect(); // get an iterator and collect
+                                                                 // into a Vec
+           
+            
+            match collection.get({proton_number - 1} as usize){ // index the vec for the                                                                                  // proton number
+                Some(value) => {
+                    match value {
+                        Ok(info) =>{
+                            let temp_str = String::from(info);
+                            let result: Vec<_> = temp_str.split(",").collect();
+                            
+                            let element = result[0];
+                            let symbol = result[1];
+
+                            return Ok((String::from(element), String::from(symbol)));                            
+                        }
+                        Err(err) => {
+                            let error = Error::new(ErrorKind::Other, "Error getting info");
+                            return Err(error);
+                        }
+                    }
+                }
+                None => {
+                    let error = Error::new(ErrorKind::Other, "Proton number out of range 1-118");
+                    return Err(error);
+                }
+            }
+                
+        }   
+        Err(err) => {
+            eprintln!("Error opening 'elements.txt' from path {} \n\
+                      (make sure to run crate from root dir) \n\
+                      error: {} ", elements_path, err);
+            return Err(err);    
+        }
+    }
+ 
+}
+ 
 pub struct Isotope{
     element: String,
     A: i32,

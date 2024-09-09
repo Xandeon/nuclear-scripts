@@ -12,6 +12,7 @@
 #![allow(non_snake_case)]           // for element names such as U for Uranium
 
 use elements::Isotope;
+use elements::get_element;
 use std::env;
 use std::fs;    // filesystem
 
@@ -40,7 +41,7 @@ fn hw1_isotopes() {
 
 fn main(){
     
-
+    println!("{:?}", get_element(69));
 
 
 }
