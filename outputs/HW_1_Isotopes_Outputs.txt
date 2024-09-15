@@ -1,0 +1,41 @@
+------------- Isotope Report ------------ 
+Element:                     Uranium (U)
+A                                236 nucleons 
+Z                                 92 protons 
+N                                144 neutrons 
+Mass (amu)                 236.02034 amu 
+                        219852.94998 MeV/c^2 
+Binding Energy:           1767.32202 MeV 
+BE/A:                        7.48865 Mev 
+-----------------------------------------
+------------- Isotope Report ------------ 
+Element:                   Palladium (Pd)
+A                                117 nucleons 
+Z                                 46 protons 
+N                                 71 neutrons 
+Mass (amu)                 116.90103 amu 
+                        108893.30574 MeV/c^2 
+Binding Energy:            977.25726 MeV 
+BE/A:                        8.35263 Mev 
+-----------------------------------------
+------------- Isotope Report ------------ 
+Element:                       Xenon (Xe)
+A                                140 nucleons 
+Z                                 54 protons 
+N                                 86 neutrons 
+Mass (amu)                 139.90885 amu 
+                        130325.09019 MeV/c^2 
+Binding Energy:           1145.30781 MeV 
+BE/A:                        8.18077 Mev 
+-----------------------------------------
+------------- Isotope Report ------------ 
+Element:                   Strontium (Sr)
+A                                 94 nucleons 
+Z                                 38 protons 
+N                                 56 neutrons 
+Mass (amu)                  93.90001 amu 
+                         87467.85691 MeV/c^2 
+Binding Energy:            802.87109 MeV 
+BE/A:                        8.54118 Mev 
+-----------------------------------------
+
